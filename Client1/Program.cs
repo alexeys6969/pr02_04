@@ -1,0 +1,9 @@
+﻿
+
+namespace Client
+{
+    class Program
+    {
+        
+    }
+}
