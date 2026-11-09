@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Common;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -13,6 +14,23 @@ namespace Client
         public static IPAddress IpAddress;
         public static int Port;
         public static int Id = -1;
+
+       static void Main(string[] args)
+        {
+            Console.Write("Введите IP адрес сервера: ");
+            string sIpAdress = Console.ReadLine();
+            Console.Write("Введите порт: ");
+            string sPort = Console.ReadLine();
+            if (int.TryParse(sPort, out Port) && IPAddress.TryParse(sIpAdress, out IpAddress))
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("Данные успешно введеыны. Подключаюсь к серверу.");
+                while (true)
+                {
+                    ConnectServer();
+                }
+            }
+        }
 
         public static bool CheckCommand(string message)
         {
@@ -100,7 +118,7 @@ namespace Client
                         byte[] messageByte = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(viewModelSend));
                         int BytesSend = socket.Send(messageByte);
                         byte[] bytes = new byte[10485760];
-                        int BytesRec = socket.Recieve(bytes);
+                        int BytesRec = socket.Receive(bytes);
                         string messageServer = Encoding.UTF8.GetString(bytes, 0, BytesRec);
                         ViewModelMessage viewModelMessage = JsonConvert.DeserializeObject<ViewModelMessage>(messageServer);
 
